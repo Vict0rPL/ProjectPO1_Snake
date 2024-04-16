@@ -99,7 +99,8 @@ void Game::handleEvents(SDL_Event& e) {
 void Game::update() {
     board->snake->moveSnake(board->BOARD_WIDTH, board->BOARD_HEIGHT);
     if (board->snake->body[0].x == board->food.x && board->snake->body[0].y == board->food.y) {
-        board->snake->growSnake(0, 0); // Grow the snake, for now at 0,0 point, something must be done about it as it's visible to the user
+      //Grow Snake (getting position of the last Vector element)
+        board->snake->growSnake(board->snake->body[board->snake->body.size() - 1].x, board->snake->body[board->snake->body.size() - 1].y);
         board->generateFood();
     }
     else if (board->snake->checkCollision()) {
