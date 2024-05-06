@@ -10,7 +10,7 @@ GameBoard::GameBoard() {
 GameBoard::~GameBoard() {}
 
 void GameBoard::setSnake(Snake* newSnake) {
-    snake.reset(newSnake); // Reset to the new snake, assuming ownership transfer
+    snake.reset(newSnake); // Reset to the new snake
 }
 
 void GameBoard::generateFood() {
