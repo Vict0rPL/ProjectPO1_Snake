@@ -22,7 +22,8 @@ Game::Game() {
     currentState = MAIN_MENU;
     board = new GameBoard();
     loadLeaderboard();
-    loadTextures(); // Load textures for snake and food
+    loadTextures(); // Load textures for ingame objects
+    loadMusic(); // Load music for different game states
 }
 
 Game::~Game() {
@@ -42,7 +43,7 @@ bool Game::initSDL() {
     }
 
     // Create window
-    window = SDL_CreateWindow("SDL Snake Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("SNEJK", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     if (window == nullptr) {
         std::cerr << "Window could not be created! SDL Error: " << SDL_GetError() << std::endl;
         SDL_Quit();
@@ -82,6 +83,27 @@ bool Game::initSDL() {
     if (font == nullptr) {
         std::cerr << "Failed to load font! SDL_ttf Error: " << TTF_GetError() << std::endl;
     }
+
+    // Initialize SDL_mixer
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        std::cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
+        return false;
+    }
+
+    // Load the icon image
+    SDL_Surface* iconSurface = SDL_LoadBMP("snakeicon.bmp");
+    if (iconSurface == nullptr) {
+        std::cerr << "Unable to load icon! SDL Error: " << SDL_GetError() << std::endl;
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return false;
+    }
+
+    // Set the window icon
+    SDL_SetWindowIcon(window, iconSurface);
+
+    // Free the icon surface
+    SDL_FreeSurface(iconSurface);
 
     // Initialization successful
     return true;
@@ -148,6 +170,15 @@ void Game::loadTextures() {
     foodTexture = SDL_CreateTextureFromSurface(renderer, tempSurface);
     SDL_FreeSurface(tempSurface);
 
+    // Load the poo texture
+    tempSurface = IMG_Load("poo.png");
+    if (tempSurface == nullptr) {
+        std::cerr << "Failed to load poo texture! IMG Error: " << IMG_GetError() << std::endl;
+        return;
+    }
+    pooTexture = SDL_CreateTextureFromSurface(renderer, tempSurface);
+    SDL_FreeSurface(tempSurface);
+
     // Load the field texture
     tempSurface = IMG_Load("field.png");
     if (tempSurface == nullptr) {
@@ -174,6 +205,38 @@ void Game::loadTextures() {
     }
     endScreenTexture = SDL_CreateTextureFromSurface(renderer, tempSurface);
     SDL_FreeSurface(tempSurface);
+}
+
+void Game::loadMusic() {
+    // Load the start screen music
+    startScreenMusic = Mix_LoadMUS("SnakeStart-Song.mp3");
+    if (startScreenMusic == nullptr) {
+        std::cerr << "Failed to load start screen music! SDL_mixer Error: " << Mix_GetError() << std::endl;
+    }
+
+    // Load the in-game music
+    inGameMusic = Mix_LoadMUS("Snake-Song.mp3");
+    if (inGameMusic == nullptr) {
+        std::cerr << "Failed to load in-game music! SDL_mixer Error: " << Mix_GetError() << std::endl;
+    }
+
+    // Load the game over music
+    gameOverMusic = Mix_LoadMUS("SnakeEnd-Song.mp3");
+    if (gameOverMusic == nullptr) {
+        std::cerr << "Failed to load game over music! SDL_mixer Error: " << Mix_GetError() << std::endl;
+    }
+
+    // Load the ping sound effect
+    pingSound = Mix_LoadWAV("ping.mp3");
+    if (pingSound == nullptr) {
+        std::cerr << "Failed to load ping sound effect! SDL_mixer Error: " << Mix_GetError() << std::endl;
+    }
+
+    // Load the ded sound effect
+    dedSound = Mix_LoadWAV("ded.mp3");
+    if (dedSound == nullptr) {
+        std::cerr << "Failed to load ded sound effect! SDL_mixer Error: " << Mix_GetError() << std::endl;
+    }
 }
 
 void Game::closeSDL() {
@@ -205,6 +268,10 @@ void Game::closeSDL() {
     if (foodTexture != nullptr) {
         SDL_DestroyTexture(foodTexture);
         foodTexture = nullptr;
+    }
+    if (pooTexture != nullptr) {
+        SDL_DestroyTexture(pooTexture);
+        pooTexture = nullptr;
     }
     if (fieldTexture != nullptr) {
         SDL_DestroyTexture(fieldTexture);
@@ -243,6 +310,11 @@ void Game::showMainMenu() {
     SDL_Event e;
     bool menuActive = true;
 
+    // Play start screen music
+    if (Mix_PlayingMusic() == 0) {
+        Mix_PlayMusic(startScreenMusic, -1);
+    }
+
     while (menuActive) {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black background
         SDL_RenderClear(renderer);
@@ -256,7 +328,7 @@ void Game::showMainMenu() {
         SDL_Surface* surfacePrompt = TTF_RenderText_Solid(font, "Press 'S' to Start, 'L' for Leaderboard", textColor);
         SDL_Texture* texturePrompt = SDL_CreateTextureFromSurface(renderer, surfacePrompt);
 
-        SDL_Rect promptRect = { 50, 50, surfacePrompt->w, surfacePrompt->h };
+        SDL_Rect promptRect = { (WINDOW_WIDTH - surfacePrompt->w) / 2, (WINDOW_HEIGHT / 2) + 10, surfacePrompt->w, surfacePrompt->h };
         SDL_RenderCopy(renderer, texturePrompt, NULL, &promptRect);
 
         SDL_FreeSurface(surfacePrompt);
@@ -277,6 +349,9 @@ void Game::showMainMenu() {
                     if (!playerName.empty()) {
                         currentState = IN_GAME;
                         resetGame();
+                        // Stop start screen music and play in-game music
+                        Mix_HaltMusic();
+                        Mix_PlayMusic(inGameMusic, -1);
                         return;
                     }
                     break;
@@ -305,7 +380,7 @@ void Game::getPlayerName() {
 
         SDL_Texture* texturePrompt = SDL_CreateTextureFromSurface(renderer, surfacePrompt);
 
-        SDL_Rect promptRect = { 50, 50, surfacePrompt->w, surfacePrompt->h };
+        SDL_Rect promptRect = { (WINDOW_WIDTH - surfacePrompt->w) / 2, 50, surfacePrompt->w, surfacePrompt->h };
         SDL_RenderCopy(renderer, texturePrompt, NULL, &promptRect);
 
         SDL_FreeSurface(surfacePrompt);
@@ -324,7 +399,7 @@ void Game::getPlayerName() {
             break;
         }
 
-        SDL_Rect inputRect = { 50, 100, surfaceInput->w, surfaceInput->h };
+        SDL_Rect inputRect = { (WINDOW_WIDTH - surfacePrompt->w) / 2, 100, surfaceInput->w, surfaceInput->h };
         SDL_RenderCopy(renderer, textureInput, NULL, &inputRect);
 
         SDL_FreeSurface(surfaceInput);
@@ -390,6 +465,9 @@ void Game::showGameOverScreen() {
     SDL_FreeSurface(surfaceRestart);
     SDL_DestroyTexture(textureRestart);
 
+    // Save the score to the leaderboard
+    addScoreToLeaderboard(playerScore, playerName);
+
     // Handle input
     SDL_Event e;
     while (SDL_PollEvent(&e) != 0) {
@@ -402,6 +480,9 @@ void Game::showGameOverScreen() {
             case SDLK_r:
                 currentState = IN_GAME;
                 resetGame();
+                // Stop game over music and play in-game music
+                Mix_HaltMusic();
+                Mix_PlayMusic(inGameMusic, -1);
                 return;
             case SDLK_q:
                 gameRunning = false;
@@ -410,8 +491,7 @@ void Game::showGameOverScreen() {
         }
     }
 
-    // Save the score to the leaderboard
-    addScoreToLeaderboard(playerScore, playerName);
+   
 
     // Present the render
     SDL_RenderPresent(renderer);
@@ -451,6 +531,7 @@ void Game::resetGame() {
     delete board;
     board = new GameBoard();
     playerScore = 0; // Reset score
+    pooSpawned = false;
 }
 
 void Game::handleEvents(SDL_Event& e) {
@@ -470,9 +551,21 @@ void Game::update() {
         board->snake->growSnake(board->snake->body.back().x, board->snake->body.back().y);
         board->generateFood();
         playerScore += 10; // Increase score when food is eaten
+        // Play ping sound
+        Mix_PlayChannel(-1, pingSound, 0);
+        if (playerScore >= 100) {
+            board->generatePoo();
+            pooSpawned = true;
+        }
     }
-    else if (board->snake->checkCollision()) {
+    else if (board->snake->checkCollision() || board->snake->body[0].x == board->poo.x && board->snake->body[0].y == board->poo.y) {
+        // Play ping sound
+        Mix_PlayChannel(-1, dedSound, 0);
+        // Stop in-game music and play game over music
         currentState = GAME_OVER;
+        SDL_Delay(1000);
+        Mix_HaltMusic();
+        Mix_PlayMusic(gameOverMusic, -1);
     }
 }
 
@@ -487,6 +580,12 @@ void Game::render() {
     // Draw food
     SDL_Rect foodRect = { board->food.x, board->food.y, board->FOOD_SEGMENT_SIZE, board->FOOD_SEGMENT_SIZE };
     SDL_RenderCopy(renderer, foodTexture, NULL, &foodRect);
+
+    // Draw poo if spawned
+    if (pooSpawned) {
+        SDL_Rect pooRect = { board->poo.x, board->poo.y, board->FOOD_SEGMENT_SIZE, board->FOOD_SEGMENT_SIZE };
+        SDL_RenderCopy(renderer, pooTexture, NULL, &pooRect);
+    }
 
     // Draw snake
     for (size_t i = 0; i < board->snake->body.size(); ++i) {

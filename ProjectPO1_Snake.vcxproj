@@ -143,6 +143,26 @@
   <ItemGroup>
     <Font Include="Pixelletters.ttf" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="ded.mp3" />
+    <Media Include="ping.mp3" />
+    <Media Include="Snake-Song.mp3" />
+    <Media Include="SnakeEnd-Song.mp3" />
+    <Media Include="SnakeStart-Song.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="field.png" />
+    <Image Include="food.png" />
+    <Image Include="poo.png" />
+    <Image Include="snakeicon.bmp" />
+    <Image Include="snake_body.png" />
+    <Image Include="snake_head_down.png" />
+    <Image Include="snake_head_left.png" />
+    <Image Include="snake_head_right.png" />
+    <Image Include="snake_head_up.png" />
+    <Image Include="start_screen.png" />
+    <Image Include="TheEND.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="packages\sdl2.nuget.redist.2.30.2\build\native\sdl2.nuget.redist.targets" Condition="Exists('packages\sdl2.nuget.redist.2.30.2\build\native\sdl2.nuget.redist.targets')" />
@@ -152,6 +172,8 @@
     <Import Project="packages\sdl2_ttf.nuget.redist.2.22.0\build\native\sdl2_ttf.nuget.redist.targets" Condition="Exists('packages\sdl2_ttf.nuget.redist.2.22.0\build\native\sdl2_ttf.nuget.redist.targets')" />
     <Import Project="packages\sdl2_ttf.nuget.2.22.0\build\native\sdl2_ttf.nuget.targets" Condition="Exists('packages\sdl2_ttf.nuget.2.22.0\build\native\sdl2_ttf.nuget.targets')" />
     <Import Project="packages\nlohmann.json.3.11.2\build\native\nlohmann.json.targets" Condition="Exists('packages\nlohmann.json.3.11.2\build\native\nlohmann.json.targets')" />
+    <Import Project="packages\sdl2_mixer.nuget.redist.2.8.0\build\native\sdl2_mixer.nuget.redist.targets" Condition="Exists('packages\sdl2_mixer.nuget.redist.2.8.0\build\native\sdl2_mixer.nuget.redist.targets')" />
+    <Import Project="packages\sdl2_mixer.nuget.2.8.0\build\native\sdl2_mixer.nuget.targets" Condition="Exists('packages\sdl2_mixer.nuget.2.8.0\build\native\sdl2_mixer.nuget.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -164,5 +186,7 @@
     <Error Condition="!Exists('packages\sdl2_ttf.nuget.redist.2.22.0\build\native\sdl2_ttf.nuget.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sdl2_ttf.nuget.redist.2.22.0\build\native\sdl2_ttf.nuget.redist.targets'))" />
     <Error Condition="!Exists('packages\sdl2_ttf.nuget.2.22.0\build\native\sdl2_ttf.nuget.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sdl2_ttf.nuget.2.22.0\build\native\sdl2_ttf.nuget.targets'))" />
     <Error Condition="!Exists('packages\nlohmann.json.3.11.2\build\native\nlohmann.json.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\nlohmann.json.3.11.2\build\native\nlohmann.json.targets'))" />
+    <Error Condition="!Exists('packages\sdl2_mixer.nuget.redist.2.8.0\build\native\sdl2_mixer.nuget.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sdl2_mixer.nuget.redist.2.8.0\build\native\sdl2_mixer.nuget.redist.targets'))" />
+    <Error Condition="!Exists('packages\sdl2_mixer.nuget.2.8.0\build\native\sdl2_mixer.nuget.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sdl2_mixer.nuget.2.8.0\build\native\sdl2_mixer.nuget.targets'))" />
   </Target>
 </Project>

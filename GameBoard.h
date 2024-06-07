@@ -19,7 +19,10 @@ public:
     };
 
     FoodSegment food;
+    FoodSegment poo;
+
     void generateFood();
+    void generatePoo();
 private:
     void setSnake(Snake* newSnake); // Clearer parameter naming
 };

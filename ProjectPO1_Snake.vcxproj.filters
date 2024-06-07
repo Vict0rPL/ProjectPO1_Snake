@@ -50,4 +50,56 @@
       <Filter>Resource Files</Filter>
     </Font>
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="ded.mp3">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="ping.mp3">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="SnakeEnd-Song.mp3">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Snake-Song.mp3">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="SnakeStart-Song.mp3">
+      <Filter>Resource Files</Filter>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="field.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="food.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="poo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="snake_body.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="snake_head_down.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="snake_head_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="snake_head_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="snake_head_up.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="snakeicon.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="start_screen.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="TheEND.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

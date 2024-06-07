@@ -9,6 +9,7 @@
 #include <ctime>
 #include <fstream>
 #include <algorithm>
+#include <SDL_mixer.h>
 #include "GameBoard.h"
 
 class Game {
@@ -30,6 +31,7 @@ private:
     };
     GameState currentState;
     bool gameRunning;
+    bool pooSpawned = false;
 
     GameBoard* board;
     TTF_Font* font;
@@ -38,6 +40,7 @@ private:
     int playerScore;
     std::vector<std::pair<int, std::string>> leaderboard;
 
+    SDL_Texture* fieldTexture = nullptr;
     SDL_Texture* snakeHeadUpTexture = nullptr;
     SDL_Texture* snakeHeadDownTexture = nullptr;
     SDL_Texture* snakeHeadLeftTexture = nullptr;
@@ -45,12 +48,20 @@ private:
     SDL_Texture* snakeBodyTexture = nullptr;
     SDL_Texture* snakeTailTexture = nullptr;
     SDL_Texture* foodTexture = nullptr;
-    SDL_Texture* fieldTexture = nullptr;
+    SDL_Texture* pooTexture = nullptr;
     SDL_Texture* startScreenTexture = nullptr;
     SDL_Texture* endScreenTexture = nullptr;
 
+    Mix_Music* startScreenMusic = nullptr;
+    Mix_Music* inGameMusic = nullptr;
+    Mix_Music* gameOverMusic = nullptr;
+
+    Mix_Chunk* pingSound = nullptr;
+    Mix_Chunk* dedSound = nullptr;
+
     bool initSDL();
     void loadTextures();
+    void loadMusic();
     void closeSDL();
     void showMainMenu();
     void showGameOverScreen();
