@@ -7,10 +7,11 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <fstream>
+#include <algorithm>
 #include "GameBoard.h"
 
-class Game
-{
+class Game {
 public:
     Game();
     ~Game();
@@ -33,16 +34,34 @@ private:
     GameBoard* board;
     TTF_Font* font;
 
+    std::string playerName;
+    int playerScore;
+    std::vector<std::pair<int, std::string>> leaderboard;
+
+    SDL_Texture* snakeHeadUpTexture = nullptr;
+    SDL_Texture* snakeHeadDownTexture = nullptr;
+    SDL_Texture* snakeHeadLeftTexture = nullptr;
+    SDL_Texture* snakeHeadRightTexture = nullptr;
+    SDL_Texture* snakeBodyTexture = nullptr;
+    SDL_Texture* snakeTailTexture = nullptr;
+    SDL_Texture* foodTexture = nullptr;
+    SDL_Texture* fieldTexture = nullptr;
+    SDL_Texture* startScreenTexture = nullptr;
+    SDL_Texture* endScreenTexture = nullptr;
+
     bool initSDL();
-    SDL_Texture* loadTexture(const std::string& path);
+    void loadTextures();
     void closeSDL();
     void showMainMenu();
     void showGameOverScreen();
-	void resetGame();
+    void showLeaderboard();
+    void resetGame();
     void mainLoop();
     void render();
     void update();
     void handleEvents(SDL_Event& e);
-    
+    void loadLeaderboard();
+    void saveLeaderboard();
+    void getPlayerName();
+    void addScoreToLeaderboard(int score, const std::string& name);
 };
-

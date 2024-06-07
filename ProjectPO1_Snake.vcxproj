@@ -106,7 +106,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -151,6 +151,7 @@
     <Import Project="packages\sdl2_image.nuget.2.8.2\build\native\sdl2_image.nuget.targets" Condition="Exists('packages\sdl2_image.nuget.2.8.2\build\native\sdl2_image.nuget.targets')" />
     <Import Project="packages\sdl2_ttf.nuget.redist.2.22.0\build\native\sdl2_ttf.nuget.redist.targets" Condition="Exists('packages\sdl2_ttf.nuget.redist.2.22.0\build\native\sdl2_ttf.nuget.redist.targets')" />
     <Import Project="packages\sdl2_ttf.nuget.2.22.0\build\native\sdl2_ttf.nuget.targets" Condition="Exists('packages\sdl2_ttf.nuget.2.22.0\build\native\sdl2_ttf.nuget.targets')" />
+    <Import Project="packages\nlohmann.json.3.11.2\build\native\nlohmann.json.targets" Condition="Exists('packages\nlohmann.json.3.11.2\build\native\nlohmann.json.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -162,5 +163,6 @@
     <Error Condition="!Exists('packages\sdl2_image.nuget.2.8.2\build\native\sdl2_image.nuget.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sdl2_image.nuget.2.8.2\build\native\sdl2_image.nuget.targets'))" />
     <Error Condition="!Exists('packages\sdl2_ttf.nuget.redist.2.22.0\build\native\sdl2_ttf.nuget.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sdl2_ttf.nuget.redist.2.22.0\build\native\sdl2_ttf.nuget.redist.targets'))" />
     <Error Condition="!Exists('packages\sdl2_ttf.nuget.2.22.0\build\native\sdl2_ttf.nuget.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sdl2_ttf.nuget.2.22.0\build\native\sdl2_ttf.nuget.targets'))" />
+    <Error Condition="!Exists('packages\nlohmann.json.3.11.2\build\native\nlohmann.json.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\nlohmann.json.3.11.2\build\native\nlohmann.json.targets'))" />
   </Target>
 </Project>
