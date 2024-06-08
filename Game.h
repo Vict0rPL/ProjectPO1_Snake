@@ -12,6 +12,10 @@
 #include <SDL_mixer.h>
 #include "GameBoard.h"
 
+/* Short desc.
+Long desc.
+\param p1_ 
+return _*/
 class Game {
 public:
     Game();
